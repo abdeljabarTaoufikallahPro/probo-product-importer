@@ -11,13 +11,17 @@ class Option
     public string $typeCode;
     public bool $isParent;
     public ?Option $parent = null;
+    public array $nameTranslations = [];
 
     public function __construct(array $data)
     {
+        $this->id = Uuid::uuid4();
         $this->code = $data['code'];
         $this->typeCode = $data['type_code'];
         $this->isParent = $data['is_parent'] ?? false;
-        $this->id = Uuid::uuid4();
+        foreach ($data['translations'] as $language => $translation) {
+            $this->nameTranslations[] = new Name($translation['name'], $language);
+        }
     }
 
     public function isParent(): bool
